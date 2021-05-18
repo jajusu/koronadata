@@ -1,0 +1,130 @@
+
+<!doctype html>
+<html lang="">
+    <body onload="hae()">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<title>Korona-dataa</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <style>
+            body{
+                width: auto;
+                max-width: 200px;
+                margin:auto;
+                padding-top: 5px;
+            }
+            #koodit{
+                padding-bottom: 5px;
+            }
+        </style>
+	</head>
+	<body>
+        <div id="ylaosa">
+            <h1>Korona-dataa</h1>        
+            <div id="koodit">Hae alueelliset tiedot 
+                <button class="btn btn-info" onclick="piilota()">aluekoodilla</button>
+            </div>
+             <div id="alueet" style="display:none;">
+                         Koko Suomi: 'Finland'<br>
+                         HUS: 'HYKS'<br>
+                         Etelä-Karjala: 'HYKS'<br>
+                         Kymenlaakso: 'HYKS'<br>
+                         Päijät-Häme: 'HYKS'<br>
+                         Pohjois-Savo: 'KYS'<br>
+                         Etelä-Savo: 'KYS'<br>
+                         Itä-Savo: 'KYS'<br>
+                         Keski-Suomi: 'KYS'<br>
+                         Pohjois-Karjala: 'OYS'<br>
+                         Pohjois-Pohjanmaa: 'OYS'<br>
+                         Kainuu: 'OYS'<br>
+                         Keski-Pohjanmaa: 'OYS'<br>
+                         Lappi: 'OYS'<br>
+                         Länsi-Pohja: 'OYS'<br>
+                         Pirkanmaa: 'TAYS'<br>
+                         Etelä-Pohjanmaa: 'TAYS'<br>
+                         Kanta-Häme: 'TAYS'<br>
+                         Varsinais-Suomi: 'TYKS'<br>
+                         Satakunta: 'TYKS'<br>
+                         Vaasa: 'TYKS'<br>
+                         Ahvenanmaa
+             </div>
+             <input type="text" id="alue" size="10">
+             <input type="button" class="btn btn-primary" value="Hae" onclick="hae()"><br/><br/>
+             <div id="info"></div>
+        </div>
+        <br>
+        <div id="korona">
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+        <script>
+            function hae(){
+                $.getJSON( "https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaHospitalData", function( data ) {
+                    document.getElementById("korona").innerHTML = "";
+                    var items = [];
+                    var maara=0;
+                    var alue = document.getElementById("alue").value;
+                        if(alue==""){
+                            alue="FINLAND";
+                            document.getElementById("info").innerHTML = "Haettu alue: koko Suomi";
+                        }else {
+                            alue=muotoileAlue(alue);
+                            document.getElementById("info").innerHTML = "Haettu alue: "+alue;
+                        }
+                    console.log("Alue "+alue);
+                    //console.log(data);
+                    $.each( data, function( key, d ) {
+                        //console.log("Avain: "+key);
+                        //console.log("d: "+d);
+                        var sairaalassa=d;
+                        //console.log("Sairaalassa: "+sairaalassa);
+                        $.each( sairaalassa, function( key2, d2 ){
+                        //console.log("Avain2 "+key2);
+                        //console.log("D2 "+d2);
+                            if(d[key2].area.toUpperCase()==alue){
+                                //console.log("Items "+items.length);
+                                var uusiPvm=muotoilePvm(d[key2].date);
+                                if (alue=="FINLAND"){
+                                    items.push("<p>Alue: koko Suomi</p><br>" );
+                                }else{
+                                    items.push("<p>Alue: " + d[key2].area + "</p><br>" );
+                                }
+                                items.push("<p>Kuolleita: " + d[key2].dead + "</p>" );
+                                items.push("<p>Tehohoidossa: " + d[key2].inIcu + "</p>" );
+                                items.push("<p>Osastolla: " + d[key2].inWard + "</p>" );
+                                items.push("<p>Sairaalassa: " + d[key2].totalHospitalised + "</p>" );
+                                items.push("<p><b>" + uusiPvm  + "</b></p>" );
+                                maara++;
+                            }
+                            console.log("Items :"+items.reverse);
+                        })
+                    })
+                    items.reverse();
+                    $("#korona").append( items.join("") );
+                    console.log("Alueet: "+maara);
+                })
+            }
+            function muotoilePvm(pvm){
+                return pvm.slice(0, 10);
+            }
+            function muotoileAlue(alue){
+                console.log("Muotoile alue: "+alue.toUpperCase());
+                return alue.toUpperCase();
+            }
+        </script>
+        <script>
+            function piilota() {
+                var x = document.getElementById("alueet");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
+                }
+            }
+        </script>
+	</body>
+</html>
