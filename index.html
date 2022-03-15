@@ -12,9 +12,14 @@
         <style>
             body{
                 width: auto;
-                max-width: 200px;
-                margin:auto;
+                max-width: 80%;
                 padding-top: 5px;
+                margin:auto;
+            }
+            #container{
+                margin-right: auto;
+                margin-left: auto;
+                width: 250px;
             }
             #koodit{
                 padding-bottom: 5px;
@@ -22,41 +27,42 @@
         </style>
 	</head>
 	<body>
-        <div id="ylaosa">
-            <h1>Korona-dataa</h1>        
-            <div id="koodit">Hae alueelliset tiedot 
-                <button class="btn btn-info" onclick="piilota()">aluekoodilla</button>
+        <div id="container">
+            <div id="ylaosa">
+                <h1>Korona-dataa</h1>        
+                <div id="koodit">Hae alueelliset tiedot <br>
+                    <button class="btn btn-info" onclick="piilota()">aluekoodilla</button>
+                </div>
+                <div id="alueet" style="display:none;">
+                    Koko Suomi: 'Finland'<br>
+                    HUS: 'HYKS'<br>
+                    Etelä-Karjala: 'HYKS'<br>
+                    Kymenlaakso: 'HYKS'<br>
+                    Päijät-Häme: 'HYKS'<br>
+                    Pohjois-Savo: 'KYS'<br>
+                    Etelä-Savo: 'KYS'<br>
+                    Itä-Savo: 'KYS'<br>
+                    Keski-Suomi: 'KYS'<br>
+                    Pohjois-Karjala: 'OYS'<br>
+                    Pohjois-Pohjanmaa: 'OYS'<br>
+                    Kainuu: 'OYS'<br>
+                    Keski-Pohjanmaa: 'OYS'<br>
+                    Lappi: 'OYS'<br>
+                    Länsi-Pohja: 'OYS'<br>
+                    Pirkanmaa: 'TAYS'<br>
+                    Etelä-Pohjanmaa: 'TAYS'<br>
+                    Kanta-Häme: 'TAYS'<br>
+                    Varsinais-Suomi: 'TYKS'<br>
+                    Satakunta: 'TYKS'<br>
+                    Vaasa: 'TYKS'<br>
+                    Ahvenanmaa
+                </div>
+                <input type="text" id="alue" size="10">
+                <input type="button" class="btn btn-primary" value="Hae" onclick="hae()"><br/><br/>
+                <div id="info"></div>
             </div>
-             <div id="alueet" style="display:none;">
-                         Koko Suomi: 'Finland'<br>
-                         HUS: 'HYKS'<br>
-                         Etelä-Karjala: 'HYKS'<br>
-                         Kymenlaakso: 'HYKS'<br>
-                         Päijät-Häme: 'HYKS'<br>
-                         Pohjois-Savo: 'KYS'<br>
-                         Etelä-Savo: 'KYS'<br>
-                         Itä-Savo: 'KYS'<br>
-                         Keski-Suomi: 'KYS'<br>
-                         Pohjois-Karjala: 'OYS'<br>
-                         Pohjois-Pohjanmaa: 'OYS'<br>
-                         Kainuu: 'OYS'<br>
-                         Keski-Pohjanmaa: 'OYS'<br>
-                         Lappi: 'OYS'<br>
-                         Länsi-Pohja: 'OYS'<br>
-                         Pirkanmaa: 'TAYS'<br>
-                         Etelä-Pohjanmaa: 'TAYS'<br>
-                         Kanta-Häme: 'TAYS'<br>
-                         Varsinais-Suomi: 'TYKS'<br>
-                         Satakunta: 'TYKS'<br>
-                         Vaasa: 'TYKS'<br>
-                         Ahvenanmaa
-             </div>
-             <input type="text" id="alue" size="10">
-             <input type="button" class="btn btn-primary" value="Hae" onclick="hae()"><br/><br/>
-             <div id="info"></div>
-        </div>
-        <br>
-        <div id="korona">
+            <br>
+            <div id="korona"></div>
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -93,7 +99,7 @@
                                 }else{
                                     items.push("<p>Alue: " + d[key2].area + "</p><br>" );
                                 }
-                                items.push("<p>Kuolleita: " + d[key2].dead + "</p>" );
+                                items.push("<p>Kuolleita yht: " + d[key2].dead + "</p>" );
                                 items.push("<p>Tehohoidossa: " + d[key2].inIcu + "</p>" );
                                 items.push("<p>Osastolla: " + d[key2].inWard + "</p>" );
                                 items.push("<p>Sairaalassa: " + d[key2].totalHospitalised + "</p>" );
